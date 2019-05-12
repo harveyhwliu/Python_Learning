@@ -1,7 +1,7 @@
 
- ### 一、python 进阶
-1、重要的Python 库  
-   0. 推荐大家使用豆瓣的源
+### 1、重要的Python 库  
+   0. 推荐大家使用豆瓣的源  
+   
       1. pip install matplotlib==2.2.4  -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
       2. pip install numpy -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
       3. pip install pandas  -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
@@ -20,8 +20,9 @@
    
    
    
-2、 python 2 和 python 3 的区别
+### 2、 python 2 和 python 3 的区别
    1. https://wiki.python.org/moin/Python2orPython3
    2. https://www.cnblogs.com/weikunzz/p/6857971.html
    3. https://blog.csdn.net/weixin_41819299/article/details/81259721
    
+s
