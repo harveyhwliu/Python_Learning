@@ -112,4 +112,99 @@
         return "SSS"
   ```
   
+  5. 使用配置文件
+
+  ```
+    flask中的配置文件是一个flask.config.Config对象（继承字典）,默认配置为：
+    {
+        'DEBUG':                                get_debug_flag(default=False),  是否开启Debug模式
+        'TESTING':                              False,                          是否开启测试模式
+        'PROPAGATE_EXCEPTIONS':                 None,                          
+        'PRESERVE_CONTEXT_ON_EXCEPTION':        None,
+        'SECRET_KEY':                           None,
+        'PERMANENT_SESSION_LIFETIME':           timedelta(days=31),
+        'USE_X_SENDFILE':                       False,
+        'LOGGER_NAME':                          None,
+        'LOGGER_HANDLER_POLICY':               'always',
+        'SERVER_NAME':                          None,
+        'APPLICATION_ROOT':                     None,
+        'SESSION_COOKIE_NAME':                  'session',
+        'SESSION_COOKIE_DOMAIN':                None,
+        'SESSION_COOKIE_PATH':                  None,
+        'SESSION_COOKIE_HTTPONLY':              True,
+        'SESSION_COOKIE_SECURE':                False,
+        'SESSION_REFRESH_EACH_REQUEST':         True,
+        'MAX_CONTENT_LENGTH':                   None,
+        'SEND_FILE_MAX_AGE_DEFAULT':            timedelta(hours=12),
+        'TRAP_BAD_REQUEST_ERRORS':              False,
+        'TRAP_HTTP_EXCEPTIONS':                 False,
+        'EXPLAIN_TEMPLATE_LOADING':             False,
+        'PREFERRED_URL_SCHEME':                 'http',
+        'JSON_AS_ASCII':                        True,
+        'JSON_SORT_KEYS':                       True,
+        'JSONIFY_PRETTYPRINT_REGULAR':          True,
+        'JSONIFY_MIMETYPE':                     'application/json',
+        'TEMPLATES_AUTO_RELOAD':                None,
+    }
+  ``` 
+  方式一：app.config['DEBUG'] = False
+  PS： 由于Config对象本质上是字典，所以还可以使用app.config.update(...)
   
+  方式二：
+  ```
+  app.config.from_pyfile("python文件名称")
+     settings.py
+        DEBUG = True
+     app.config.from_pyfile("settings.py")
+ 
+  app.config.from_envvar("环境变量名称")
+     环境变量的值为python文件名称名称，内部调用from_pyfile方法
+ 
+  app.config.from_json("json文件名称")
+      JSON文件名称，必须是json格式，因为内部会执行json.loads
+ 
+  app.config.from_mapping({'DEBUG':True})
+      字典格式
+ 
+  app.config.from_object("python类或类的路径")
+      app.config.from_object('pro_flask.settings.TestingConfig')
+      settings.py
+
+      class Config(object):
+          DEBUG = False
+          TESTING = False
+          DATABASE_URI = 'sqlite://:memory:'
+ 
+      class ProductionConfig(Config):
+            DATABASE_URI = 'mysql://user@localhost/foo'
+ 
+      class DevelopmentConfig(Config):
+            DEBUG = True
+ 
+      class TestingConfig(Config):
+            TESTING = True
+ 
+      PS: 从sys.path中已经存在路径开始写
+     
+    PS: settings.py文件默认路径要放在程序root_path目录，如果instance_relative_config为True，则就是instance_path目录
+  ```
+  
+  6. 路由系统
+     1. @app.route('/user/<username>')     #常用的   不加参数的时候默认是字符串形式的
+     2. @app.route('/post/<int:post_id>')  #常用的   #指定int，说明是整型的
+     3. @app.route('/post/<float:post_id>')
+     4. @app.route('/post/<path:path>')
+     5. @app.route('/login', methods=['GET', 'POST'])
+     
+     参考：
+  ```
+    DEFAULT_CONVERTERS = {
+        'default':          UnicodeConverter,
+        'string':           UnicodeConverter,
+        'any':              AnyConverter,
+        'path':             PathConverter,
+        'int':              IntegerConverter,
+        'float':            FloatConverter,
+        'uuid':             UUIDConverter,
+    }
+  ```

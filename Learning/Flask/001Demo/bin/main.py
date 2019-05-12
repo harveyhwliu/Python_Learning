@@ -68,7 +68,7 @@ def login():
         return render_template("login.html")
     else:
         print(request.values)   #这个里面什么都有，相当于body
-        username = request.form.get("username")
+        username = request.form.get("username")#post  获取参数
         password = request.form.get("password")
         print username,password
         if username=="haiyan" and password=="123":
@@ -119,6 +119,13 @@ def __index_function():
     return "SSS"
 
 
+#测试5  flask 配置文件
+
+#方式一：PS： 由于Config对象本质上是字典，所以还可以使用app.config.update(...)
+app.config['DEBUG'] = False
+
+
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # app.run(debug=True)
+    app.run()
