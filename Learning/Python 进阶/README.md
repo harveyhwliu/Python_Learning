@@ -241,7 +241,16 @@
    2.
 
 
+## 12、collections 容器的使用
+### 1） 基本用法
+   1. Python的一个模块，它包含许多容器数据类型，名字叫作collections，包括：
+   - defaultdict
+   - counter
+   - deque
+   - namedtuple
+   - enum.Enum (包含在Python 3.4以上)
 
+### 2）使用场合:
 
 
 
