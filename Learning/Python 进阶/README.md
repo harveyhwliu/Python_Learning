@@ -24,6 +24,7 @@
    1. https://wiki.python.org/moin/Python2orPython3
    2. https://www.cnblogs.com/weikunzz/p/6857971.html
    3. https://blog.csdn.net/weixin_41819299/article/details/81259721
+   4. filter map 函数Python2返回的是可迭代对象Iteratable，而Python3 返回的迭代器Iterator,需要通过list()来转一下,且python3 需要通过from functools import reduce 导入reduce,python2 则不需要的
    
 
 ### 2、*args 和 **kwargs的区别
@@ -77,7 +78,10 @@
 
 ### 5、 MAP Filter reduce
 ## 1） 基本用法
-   1. 
-   
+   1. Map会将一个函数映射到一个输入列表的所有元素上。这是它的规范：map(function_to_apply, list_of_inputs),举例：list(map(lambda x: x**2, [1,2,3,4,5]))
+   2. filter过滤列表中的元素，并且返回一个由所有符合要求的元素所构成的列表，符合要求即函数映射到该元素时返回值为True,filter(lambda x:x>0,[0,1,2,3])
+   3. 当需要对一个列表进行一些计算并返回结果时，Reduce 是个非常有用的函数,举例：reduce(lambda x,y:x+y,[1,2,3,4,5,6,7,8,9])#求列表的各项元素之和
+
+
 ## 2）使用场合
-   1. 
+   1. 简化代码，提高效果，例如对list的处理上取代for循环
