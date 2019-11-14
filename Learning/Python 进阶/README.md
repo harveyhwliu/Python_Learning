@@ -126,8 +126,8 @@
 
    3. 业务应用场景： web应用端点（endpoint）的访问鉴权（Flask和Django web框架） 
    4. @wraps 也是装饰器，但他接收一个参数，就像任何普通函数那样为什么我们不这样做呢？  因为当使用@my_decorator语法时，是在应用一个以单个函数作为参数的一个包裹函数。创建一个包裹函数，举例如下：
-    
-    ```python
+
+   ```python
     #创建一个包裹函数  包裹函数其实是对函数进行封装。将所有可能出现的情况写在一起，以便于程序的调用，提高程序的可读性
     def logit(logfile='out.log'):
         def logging_decorator(func):
@@ -147,7 +147,6 @@
     def my_test2():
         pass
 ```
-
 
 ### 9、
 ## 1） 基本用法
