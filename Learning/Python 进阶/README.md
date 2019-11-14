@@ -23,6 +23,8 @@
    4. filter map 函数Python2返回的是可迭代对象Iteratable，而Python3 返回的迭代器Iterator,需要通过list()来转一下,且python3 需要通过from functools import reduce 导入reduce,python2 则不需要的
    5. type返回结果的类型有区别了，例如 type("ss") ，python2 返回结果是<type 'str'>,python3 返回结果是<class 'str'>
    6. python3取消了python2中dict的if _dict_obj.has_key(key)的方法，python3中使用if key in _dict_obj:
+   7. python3 dict没有iteritems(),只能使用items()
+   8. python2 中tuple用()来定义，python3中使用{}来定义
 
 ## 2、*args 和 **kwargs的区别
 ### 1） 基本用法
@@ -271,7 +273,33 @@
    - inspect:获取活跃对象的信息,比如对象的成员等  import inspect，print(inspect.getmembers(str))
 
 ### 2）使用场合:
-   1.
+   1. 了解当前可用的函数，或者了解对象自身等场景
 
+## 15、comprehensions 推导式
+### 1） 基本用法
+   1.  推导式是可以从一个数据序列构建另一个新的数据序列的结构体。 共有三种推导
+   - 列表(list)推导式 ：list comprehensions 格式：variable = [out_exp for out_exp in input_list if out_exp == 2]
+   - 字典(dict)推导式 : dict comprehensions 格式：统计字典中key的频数- mcase={'a':1,'A':2,'c':3}；{k.lower(): mcase.get(k.lower(), 0) + mcase.get(k.upper(), 0) for k in mcase.keys()}
+   - 集合(set)推导式  : set comprehensions  格式：(x**2 for x in [1, 1, 2])  python3要改为{x**2 for x in [1, 1, 2]},否则返回的就是generator
 
+### 2）使用场合:
+   1. list comprehensions 在当你需要使用for循环来生成一个新列表使用，例如：squared = [x**2 for x in range(10)]
+   2. dict comprehensions 快速替换value:key  {v:k for k,v in {"a":1,"b":2}.items()}
+
+## 16、异常
+### 1） 基本用法
+   1. 基本的使用方式是：
+
+   ```python
+       try:
+        file = open('test.txt', 'rb')
+    except IOError as e:
+        print('An IOError occurred. {}'.format(e.args[-1]))
+    except Exception as e:
+        print('{}. {}'.format(e,traceback.format_exc())
+
+```
+
+### 2）使用场合:
+   1. 在for循环中采用try catch来提高效率，避免if条件判断的性能损失
 
