@@ -320,3 +320,26 @@
    1. 简化代码逻辑
    2. 常和map,filter ,reduce这些关键字一起使用
 
+## 18、一行式
+### 1） 基本用法
+   1. 打印语句： from pprint import pprint;pprint([1,2,3,4])
+   2. 快速漂亮的从文件打印出json数据  cat json.json | python -m json.tool
+   3. 脚本性能分析： python -m cProfile my_script.py  #cProfile是一个比profile更快的实现，因为它是用c写的 TODO: 这里以后才补充
+   4. CSV转换为json ：python -c "import csv,json;print json.dumps(list(csv.reader(open('csv_file.csv'))))"
+   5. 列表辗平：使用itertools包中的itertools.chain.from_iterable轻松快速的辗平一个列表  list(itertools.chain.from_iterable([[1, 2], [3, 4], [5, 6]]))
+   6. 快速给类初始化，避免大量的赋值语句
+
+   ```python
+   class A(object):
+        def __init__(self, a, b, c, d, e, f):# 相当于定义并初始化了self.a,self.b,..,self.f, 也可以通过self.__dict__["a"]这种方式来调用
+            self.__dict__.update({k: v for k, v in locals().items() if k != 'self'})
+
+        def show():
+            pprint("{0} {1} {2} {3} {4} {5}".format(self.a,self.b,self.c,self.d,self.e,self.f))
+            pprint("{0} {1}".format(id(self.a),id(self.__dict__["a"])))
+
+```
+
+### 2）使用场合:
+   1. 简化代码逻辑
+   2. python 性能优化相关，比如cProfile profile hotshot等
