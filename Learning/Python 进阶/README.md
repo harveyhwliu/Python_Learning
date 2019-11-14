@@ -1,7 +1,5 @@
-
-### 0、重要的Python 库  
-   0. 推荐大家使用豆瓣的源  
-   
+### 0、重要的Python 库
+   0. 推荐大家使用豆瓣的源
       1. pip install matplotlib==2.2.4  -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
       2. pip install numpy -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
       3. pip install pandas  -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
@@ -17,15 +15,13 @@
       
    3. Matplotlib 最流行的绘图数据图表的python库
    4. Scipy  包括统计,优化,整合,线性代数模块,傅里叶变换,信号和图像处理,常微分方程求解器等等
-   
-   
-   
+
 ### 1、 python 2 和 python 3 的区别
    1. https://wiki.python.org/moin/Python2orPython3
    2. https://www.cnblogs.com/weikunzz/p/6857971.html
    3. https://blog.csdn.net/weixin_41819299/article/details/81259721
    4. filter map 函数Python2返回的是可迭代对象Iteratable，而Python3 返回的迭代器Iterator,需要通过list()来转一下,且python3 需要通过from functools import reduce 导入reduce,python2 则不需要的
-   
+   5. type返回结果的类型有区别了，例如 type("ss") ，python2 返回结果是<type 'str'>,python3 返回结果是<class 'str'>
 
 ### 2、*args 和 **kwargs的区别
 ## 1） 基本用法
@@ -58,7 +54,6 @@
 ## 2）使用场合
    1. 一种交互的源代码调试功能，主要特性包括设置断点、单步调试、进入函数调试、查看当前代码、查看栈片段、动态改变变量的值等 
 
-
 ### 4、 Generators 生成器
 ## 1） 基本用法
    1. 可迭代对象(Iterable) 比如list,str 就是能提供迭代器的任意对象，Python中任意的对象，只要它定义了可以返回一个迭代器的__iter__方法，或者定义了可以支持下标索引的__getitem__方法，就是可迭代对象。  
@@ -69,12 +64,8 @@
    6. Python内置函数：next()。它允许我们获取一个Iterator的下一个元素，实际上是yield返回所有元素后，再次调用 next()触发了一个StopIteration的异常，for循环会自动捕捉到这个异常并停止调用next()。
    7. Python内置函数，iter。它将根据一个可迭代对象返回一个迭代器对象,比如print next(iter([1,2,3]))
    
-   
 ## 2）使用场合
    1. 节省内存，生成器最佳应用场景是：你不想同一时间将所有计算出来的大量结果集分配到内存当中，特别是结果集里还包含循环。
-   
-
-
 
 ### 5、 MAP Filter reduce
 ## 1） 基本用法
@@ -84,4 +75,20 @@
 
 
 ## 2）使用场合
-   1. 简化代码，提高效果，例如对list的处理上取代for循环
+   1. 简化代码，提高效率，例如对list的处理上取代for循环
+
+### 6、 set的使用
+## 1） 基本用法
+   1. set不能包含重复的值,例如对查找重复的元素：print(list(set([x for x in [1,2,3,2] if [1,2,3,2].count(x)>1])))
+   2. set用来求两个序列的交集：print(set(a).intersection(set(b)))
+   3. set用来求两个序列中不交叉的数据集：print(set(a).difference(set(b)))  #在a序列但不在b序列中的元素集
+
+
+## 2）使用场合
+   1. 通过set不能包含重复元素的特性，实现业务侧查重、查交集、查差集的需求
+
+
+
+
+
+
