@@ -79,6 +79,26 @@ def function3(a,b):
     time.sleep(a*b)
 
 
+#创建一个包裹函数
+def logit(logfile='out.log'):
+    def logging_decorator(func):
+        @wraps(func)
+        def warppend_function(*args,**kwargs):
+            log_string = "{0} was called\n".format(func.__name__)
+            with open(logfile,'a') as fd:
+                fd.write(log_string)
+            return func(*args,**kwargs)
+        return warppend_function
+    return logging_decorator
+
+@logit()
+def my_test1():
+    pass
+
+@logit(logfile="access.log")
+def my_test2():
+    pass
+
 
 
 def main():
@@ -104,7 +124,11 @@ def main():
     # print(function2.__name__)
     #
     #
-    function3(2,1)
+    # function3(2,1)
+
+    my_test1()
+    my_test2()
+
 
 
 if __name__ == "__main__":
