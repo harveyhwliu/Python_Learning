@@ -22,6 +22,7 @@
    3. https://blog.csdn.net/weixin_41819299/article/details/81259721
    4. filter map 函数Python2返回的是可迭代对象Iteratable，而Python3 返回的迭代器Iterator,需要通过list()来转一下,且python3 需要通过from functools import reduce 导入reduce,python2 则不需要的
    5. type返回结果的类型有区别了，例如 type("ss") ，python2 返回结果是<type 'str'>,python3 返回结果是<class 'str'>
+   6. python3取消了python2中dict的if _dict_obj.has_key(key)的方法，python3中使用if key in _dict_obj:
 
 ### 2、*args 和 **kwargs的区别
 ## 1） 基本用法
@@ -86,6 +87,15 @@
 
 ## 2）使用场合
    1. 通过set不能包含重复元素的特性，实现业务侧查重、查交集、查差集的需求
+
+### 6、python中的三元运算符
+## 1） 基本用法
+   1. 三元运算符是基于条件表达式真假的条件判断，python2.4以上才支持，举例：x=0 if x in pid_l else pid_l[x]
+   2. 切记使用print((1/0,11)[condition]) 这种元组条件表达式，因为元素是先建立数据，再利用下标索引来查找数据，因此在元组中所有条件都执行
+
+## 2）使用场合
+   1.  省略多余的if表达式，可以使代码简单可维护
+   2.  如果逻辑中的条件异常，或者是重计算型（计算较久）的情况下，最好尽量避免使用元组条件表达式
 
 
 
