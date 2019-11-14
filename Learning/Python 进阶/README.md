@@ -88,14 +88,42 @@
 ## 2）使用场合
    1. 通过set不能包含重复元素的特性，实现业务侧查重、查交集、查差集的需求
 
-### 6、python中的三元运算符
+### 7、python中的三元运算符
 ## 1） 基本用法
    1. 三元运算符是基于条件表达式真假的条件判断，python2.4以上才支持，举例：x=0 if x in pid_l else pid_l[x]
    2. 切记使用print((1/0,11)[condition]) 这种元组条件表达式，因为元素是先建立数据，再利用下标索引来查找数据，因此在元组中所有条件都执行
 
 ## 2）使用场合
-   1.  省略多余的if表达式，可以使代码简单可维护
-   2.  如果逻辑中的条件异常，或者是重计算型（计算较久）的情况下，最好尽量避免使用元组条件表达式
+   1. 省略多余的if表达式，可以使代码简单可维护
+   2. 如果逻辑中的条件异常，或者是重计算型（计算较久）的情况下，最好尽量避免使用元组条件表达式
+
+### 8、decorators 装饰器
+## 1） 基本用法
+   1. decorators 是修改其他函数的功能的函数。他们有助于让在对已有函数进行功能扩充，也更Pythonic（Python范儿）
+   2. 可以在函数中定义另外的函数。也就是说：我们可以创建嵌套的函数,并可以在外层函数中返回其内内嵌函数；函数也可以作为实参传递给另外函数的形参例如printNum(getNum)，这里getNum是一个函数
+   3. 直接采用函数内嵌的方式返回，发现采用注解前后，本质上是函数的名字和注释文档docstring已经发生了重写。使用from functools import wraps 中@wraps(func)  @wraps接受一个函数来进行装饰，并加入了复制函数名称、注释文档、参数列表等等的功能。这可以让我们在装饰器里面访问在装饰之前的函数的属性。
+
+## 2）使用场合
+   1. 不改变原来函数的基础上，加上一些新的功能，比如日志，耗时分析等等
+   2. 实际应用举例： 计算函数耗时时间的装饰器
+   ``
+    def decorator_calc_cost_time(func):  #装饰器的名字
+        start_time = time.time()
+        @wraps(func)                     #采用@wraps，接收原来函数的名称，注释文档，以及参数列表中
+        def decorated(*args,**kwargs):   #通过函数内嵌来实现
+            res = func(*args,**kwargs)   #得到原来函数的返回结果并返回
+            print("%.3fs"%(time.time()-start_time))
+            return res
+        return decorated                 #返回内嵌函数名
+
+    #这就是一个装饰器
+
+    @decorator_calc_cost_time
+    def function3(a,b):
+        print("I am function3()")
+        time.sleep(a*b)
+    ``
+    3. 业务应用场景： web应用端点（endpoint）的访问鉴权（Flask和Django web框架）
 
 
 
