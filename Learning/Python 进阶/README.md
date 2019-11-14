@@ -198,7 +198,7 @@
 
 ## 10、mutable 和 immutable
 ### 1） 基本用法
-   1. Python中可变(mutable)与不可变(immutable)的数据类型,string,float,integer,tuple是不可变类型，可变类型：list,dict （通过id()函数来看内存地址）
+   1. Python中可变(mutable)与不可变(immutable)的数据类型,string,float,integer,tuple是不可变类型，可变类型：list,dict （通过id()函数来看对象唯一ID）
    2. mutable 类型：变量名存储的是一个地址，该地址指向一个具体的对象，并且不管对变量的值即对象做怎么样的操作，都不会改变变量名存储的地址
    3. immutable 类型：不变数据类型的对象一旦发生改变，就会在内存中开辟一个新的空间用于存储新的对象，原来的变量名就会指向一个新的地址。
    4. 由于python规定参数传递都是传递引用，也就是传递给函数的是原变量实际所指向的内存空间，修改的时候就会根据该引用的指向去修改该内存中的内容，但由于有可变类型和不可变类型，这样的话，当传过来的是可变类型(list,dict)时，我们在函数内部修改就会影响函数外部的变量。而传入的是不可变类型时在函数内部修改改变量并不会影响函数外部的变量，因为修改的时候会先复制一份再修改。
@@ -210,6 +210,7 @@
 ### 1） 基本用法
    1. Python中，每个类都有实例属性。默认情况下Python用一个字典来保存一个对象的实例属性，一方面，它允许我们在运行时去设置任意的新属性，另一方面，对于那些已知属性的小类来说，会浪费很多内存。
    2. 可以使用__slots__(插槽)告诉python 不使用字典而且只给一个固定集合的属性分配空间
+   3. 可以时候用dir(对象),或者inspect模块（import inspect） inspect.getmember(对象)  查看对象属性，发现少了 __dict__ 属性
 
 ### 2）使用场合: 针对那些对内存比较在意的程序，但也存在如下的缺点：
    1. 每个继承的子类都要重新定义一遍__slots__
@@ -235,22 +236,42 @@
 
 ```
 
-
 ### 2）使用场合:
    1. 使用smartcd来帮助你管理你的环境，当你切换目录时，它可以帮助你激活（activate）和退出（deactivate）你的virtualenv github(https://github.com/cxreg/smartcd)
    2.
-
 
 ## 12、collections 容器的使用
 ### 1） 基本用法
    1. Python的一个模块，它包含许多容器数据类型，名字叫作collections，包括：
    - defaultdict
-   - counter
-   - deque
-   - namedtuple
-   - enum.Enum (包含在Python 3.4以上)
+   - counter   #from collections import Counter   Counter是一个计数器，它可以帮助我们针对某项数据进行计数
+   - deque     #from collections import deque     deque提供了一个双端队列，你可以从头/尾两端添加或删除元素，deque(maxlen=30)默认长度为30，超过30个元素将会从左（前）到右（尾）回滚。
+   - namedtuple#from collections import namedtuple 以像字典(dict)一样访问namedtuple，但namedtuple是不可变的,却可以让你的元组变得自文档，namedtuple的每个实例没有对象字典，所以它们很轻量，与普通的元组比，并不需要更多的内存。这使得它们比字典更快
+   - enum.Enum #from enum import Enum             class Species(Enum): cat =1 ;Species.cat
 
 ### 2）使用场合:
+   1. 实际应用中按需选择，提升效率
+
+## 13、enumerate 的使用
+### 1） 基本用法
+   1. 枚举(enumerate)是Python内置函数,允许我们遍历序列并自动计数，enumerate 第一参数是iterable，第二个元素是 开始计数的基准，默认为0
+
+### 2）使用场合:
+   1. for c, value in enumerate([1,2,3], 1):  #从1开始计算索引，不是从0开始计算
+   2. list(enumerate("abcsdkskdfksfsf", 1))   #创建一个包括索引和对应索引位置元素值得元组序列
+
+
+## 14、introspection 自省
+### 1） 基本用法
+   1. introspection 自省，内省，在计算机编程领域里，是指在运行时来判断一个对象的类型的能力，python内一切皆对象
+   2. python 自省的最重要函数：
+   - dir  : dir([1,2,3]),如果运行dir()而不传入参数，那么它会返回当前作用域的所有名字
+   - type : type 函数返回一个对象的类型  type(dict)
+   - id :   id()函数返回任意不同种类对象的唯一ID
+   - inspect:获取活跃对象的信息,比如对象的成员等  import inspect，print(inspect.getmembers(str))
+
+### 2）使用场合:
+   1.
 
 
 
