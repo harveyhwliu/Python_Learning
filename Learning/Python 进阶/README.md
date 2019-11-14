@@ -187,15 +187,58 @@
         pass
 ```
 
-
-## 9、global变量
+## 9、global  return的使用
 ### 1） 基本用法
    1. global 变量名， 在局部作用域中创建或者声明了一个全局变量，不能声明的时候赋值（global res = a+b是错误的）应该是(global res ;res = a+B)
+   2. 如果函数返回多个变量，应该如何做呢？ 一种是通过返回一个包含多个值得tuple,list或者dict来解决。另一种则是直接return var1,var2,..,varn
 
 ### 2）使用场合
    1. 应该避免使用global,因为global 将变量的作用域变成了全局作用域，产生问题的概率将会增大
 
 
+## 10、mutable 和 immutable
+### 1） 基本用法
+   1. Python中可变(mutable)与不可变(immutable)的数据类型,string,float,integer,tuple是不可变类型，可变类型：list,dict （通过id()函数来看内存地址）
+   2. mutable 类型：变量名存储的是一个地址，该地址指向一个具体的对象，并且不管对变量的值即对象做怎么样的操作，都不会改变变量名存储的地址
+   3. immutable 类型：不变数据类型的对象一旦发生改变，就会在内存中开辟一个新的空间用于存储新的对象，原来的变量名就会指向一个新的地址。
+   4. 由于python规定参数传递都是传递引用，也就是传递给函数的是原变量实际所指向的内存空间，修改的时候就会根据该引用的指向去修改该内存中的内容，但由于有可变类型和不可变类型，这样的话，当传过来的是可变类型(list,dict)时，我们在函数内部修改就会影响函数外部的变量。而传入的是不可变类型时在函数内部修改改变量并不会影响函数外部的变量，因为修改的时候会先复制一份再修改。
+
+### 2）使用场合
+   1. python只允许使用引用传递，但由于mutable和immutable的影响，函数传参时，只有list ,dict才会修改原来的内容，其他的不会
+
+## 11、__slot__的使用
+### 1） 基本用法
+   1. Python中，每个类都有实例属性。默认情况下Python用一个字典来保存一个对象的实例属性，一方面，它允许我们在运行时去设置任意的新属性，另一方面，对于那些已知属性的小类来说，会浪费很多内存。
+   2. 可以使用__slots__(插槽)告诉python 不使用字典而且只给一个固定集合的属性分配空间
+
+### 2）使用场合: 针对那些对内存比较在意的程序，但也存在如下的缺点：
+   1. 每个继承的子类都要重新定义一遍__slots__
+   2. 实例只能包含哪些在__slots__定义的属性，这对写程序的灵活性有影响，比如你由于某个原因新网给instance设置一个新的属性，比如instance.a = 1, 但是由于a不在__slots__里面就直接报错了，你得不断地去修改__slots__或者用其他方法迂回的解决
+   3. 实例不能有弱引用（weakref）目标，否则要记得把__weakref__放进__slots__
+   4. weakref号称可以解决循环引用gc，Python使用了垃圾回收器来自动销毁那些不再使用的对象。每个对象都有一个引用计数，当这个引用计数为0时Python能够安全地销毁这个对象。使用weakref模块，你可以创建到对象的弱引用，Python在对象的引用计数为0或只存在对象的弱引用时将回收这个对象
+
+## 11、virtual-env 虚拟环境
+### 1） 基本用法
+   1. Virtualenv 是一个工具，它能够帮我们创建一个独立(隔离)的Python环境。从而实现python版本库的隔离等需求
+   2.
+
+   ```python
+    pip install virtualenv  #安装virtual-env
+    virtualenv my_proj_name #创建一个文件夹 my_proj_name 来创建一个virtualenv 环境
+    source my_proj_name/bin/activate #激活这个隔离环境 virtualenv
+    deactivate              #退出virtualenv,运行之后将恢复使用系统全局的Python模块
+
+
+    ps : 默认情况下，virtualenv不会使用系统全局模块。
+    virtualenv --system-site-packages my_proj_name  #使用--system-site-packages参数  让virtualenv使用系统全局模块
+
+
+```
+
+
+### 2）使用场合:
+   1. 使用smartcd来帮助你管理你的环境，当你切换目录时，它可以帮助你激活（activate）和退出（deactivate）你的virtualenv github(https://github.com/cxreg/smartcd)
+   2.
 
 
 
