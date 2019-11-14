@@ -343,3 +343,21 @@
 ### 2）使用场合:
    1. 简化代码逻辑
    2. python 性能优化相关，比如cProfile profile hotshot等
+
+## 19、for else的使用
+### 1） 基本用法
+   1. for 的else从句会在循环正常结束时执行。这意味着，循环没有遇到任何break
+
+   ```python
+    for item in [1,2,3,4,5,0]:
+        if num == item:
+            #TODO 做一些动作
+            break
+    else:
+        #没有找到的时候做一些动作
+        pprint("没有找到元素，遍历了整个序列后退出的")
+
+```
+
+### 2）使用场合:
+   1. for else 常用在循环查找元素，区分是找到元素才退出还是遍历数据后没有知道才退出的
