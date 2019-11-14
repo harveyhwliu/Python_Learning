@@ -148,7 +148,7 @@
         pass
 ```
 
-   5. 装饰器类,进一步对装饰器的功能进行扩展
+   5. 装饰器类,进一步对装饰器的功能进行扩展,@email_logit将会和@decorator_logit_c产生同样的效果，但会多一个notify指定的新功能
 
    ```python
     class decorator_logit_c(object):#基类
@@ -188,12 +188,12 @@
 ```
 
 
-### 9、
+### 9、global变量
 ## 1） 基本用法
-   1.
+   1. global 变量名， 在局部作用域中创建或者声明了一个全局变量，不能声明的时候赋值（global res = a+b是错误的）应该是(global res ;res = a+B)
 
 ## 2）使用场合
-   1.
+   1. 应该避免使用global,因为global 将变量的作用域变成了全局作用域，产生问题的概率将会增大
 
 
 
