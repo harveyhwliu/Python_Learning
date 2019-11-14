@@ -99,6 +99,44 @@ def my_test1():
 def my_test2():
     pass
 
+class decorator_logit_c(object):
+    def __init__(self,logfile="out.log"):
+        self.logfile = logfile
+
+    def __call__(self,func):
+        @wraps(func)
+        def wrapped_function(*args,**kwargs):
+            log_string = "{0} was called\n".format(func.__name__)
+            with open(self.logfile,'a') as fd:
+                fd.write(log_string)
+            return func(*args,**kwargs)
+        return wrapped_function
+
+
+    def notify(self):
+        pass#基类只进行日志打印功能
+
+class email_logit(decorator_logit_c):
+    '''
+    一个logit的实现版本，可以在函数调用时发送email给管理员
+    '''
+    def __init__(self, email='admin@myproject.com', logfile="out2.log"):
+        self.email = email
+        self.logfile = logfile
+        super(decorator_logit_c, self).__init__()
+
+    def notify(self):
+        # 发送一封email到self.email
+        # 这里就不做实现了
+        pass
+
+@decorator_logit_c(logfile="a.log")
+def my_test3():
+    pass
+
+@email_logit(email="2580205897@qq.com",logfile="access2.log")
+def my_test4():
+    pass
 
 
 def main():
@@ -126,10 +164,12 @@ def main():
     #
     # function3(2,1)
 
-    my_test1()
-    my_test2()
+    # my_test1()
+    # my_test2()
 
 
+    my_test3()
+    my_test4()
 
 if __name__ == "__main__":
     main()
