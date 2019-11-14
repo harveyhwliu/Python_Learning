@@ -361,3 +361,103 @@
 
 ### 2）使用场合:
    1. for else 常用在循环查找元素，区分是找到元素才退出还是遍历数据后没有知道才退出的
+
+
+
+## 20、python 调用C代码
+### 1） 基本用法
+   1. 开发者有三种方法可以在自己的Python代码中来调用C编写的函数-，，
+   - ctypes：Python中的ctypes模块可能是Python调用C方法中最简单的一种。
+   1)  ctypes模块提供了和C语言兼容的数据类型和函数来加载dll文件，因此在调用时不需对源文件做任何的修改
+   2)  ctypes接口允许我们在调用C函数时使用原生Python中默认的字符串型和整型。对于其他类似布尔型和浮点型这样的类型，必须要使用正确的ctype类型才可以
+   3)  这种方法虽然简单，清晰，但是却很受限。例如，并不能在C中对对象进行操作
+
+
+   ```python c
+
+    #c函数代码 -- 生成so文件 linx : gcc -shared -Wl,-soname,adder -o adder.so -fPIC add.c
+    #         --  For mac :      gcc -shared -Wl,-install_name,adder.so -o adder.so -fPIC add.c
+    #include <stdio.h>
+
+    int add_int(int num1, int num2){
+        return num1 + num2;
+    }
+
+    float add_float(float num1, float num2){
+        return num1 + num2;
+    }
+
+    from ctypes import *
+
+    def test_demo1():
+        adder = CDLL('./adder.so')                    #加载dll
+        res_int = adder.add_int(4,5)
+        print("Sum of 4 and 5 = " + str(res_int))
+
+        adder.add_float.argtypes = (c_float, c_float) # add_float 有两个形参，都是 float 类型
+        adder.add_float.restype = c_float             # add_float 返回值的类型是 float
+        print("Sum of 5.5 and 4.1 = ", str(adder.add_float(5.5, 4.1)))
+
+```
+
+   - SWIG：SWIG是Simplified Wrapper and Interface Generator的缩写
+   1） 在这个方法中，开发人员必须编写一个额外的接口文件来作为SWIG(终端工具)的入口。
+   2） Python开发者一般不会采用这种方法，因为大多数情况它会带来不必要的复杂。
+   3)  而当你有一个C/C++代码库需要被多种语言调用时，这将是个非常不错的选择
+
+   ```c
+   //----------------未经过测试 ----------------
+    #include <time.h>
+    double My_variable = 3.0;
+
+    int fact(int n) {
+        if (n <= 1) return 1;
+        else return n*fact(n-1);
+
+    }
+
+    int my_mod(int x, int y) {
+        return (x%y);
+
+    }
+
+    char *get_time()
+    {
+        time_t ltime;
+        time(&ltime);
+        return ctime(&ltime);
+    }
+
+    //swig 进行编译
+    swig -python example.i
+    gcc -c example.c example_wrap.c  -I/usr/local/include/python2.1
+    ld -shared example.o example_wrap.o -o _example.so
+
+    //python 输出：
+    >>> import example
+    >>> example.fact(5)
+    120
+    >>> example.my_mod(7,3)
+    1
+    >>> example.get_time()
+    'Sun Feb 11 23:01:07 1996'
+
+```
+
+   - Python/C API：Python/C API可能是被最广泛使用的方法。它不仅简单，而且可以在C代码中操作你的Python对象
+   1) 以特定方式来编写，所有的Python对象都被表示为一种叫做PyObject的结构体，并且Python.h头文件中提供了各种操作它的函数。例如，如果PyObject表示为PyListType(列表类型)时，那么我们便可以使用PyList_Size()函数来获取该结构的长度
+   2)
+
+   ```python
+
+
+```
+
+### 2）使用场合:
+   1. 对性能要求高的部分，比如函数的执行部分可以用c实现，规避python全局锁，C要比Python快50倍以上
+   2. C语言中有很多传统类库，而且有些正是你想要的，但你又不想用Python去重写它们
+   3. 想对从内存到文件接口这样的底层资源进行访问
+
+   4. ctypes 只能使用一个简单的场合，但其功能很受限。例如，并不能在C中对对象进行操作
+   5. 如果c的代码可以被多种语言使用，可以采用swig的方式
+   6.
