@@ -291,15 +291,32 @@
    1. 基本的使用方式是：
 
    ```python
-       try:
-        file = open('test.txt', 'rb')
-    except IOError as e:
-        print('An IOError occurred. {}'.format(e.args[-1]))
-    except Exception as e:
-        print('{}. {}'.format(e,traceback.format_exc())
+        try:
+            file = open('test.txt', 'rb')
+        except (IOError, EOFError) as e:
+            print('An IOError occurred. {}'.format(e.args[-1]))
+        except Exception as e:
+            print('{}. {}'.format(e,traceback.format_exc())
+            #raise  #如果需要抛出异常的化
+        else:# 这里的代码只会在try语句里没有触发异常时运行,但是这里的异常将 *不会* 被捕获
+            print('This would only run if no exception occurs. And an error here would NOT be caught.')
+        finally:#不管异常是否触发都将会被执行,做一些退出前的清理操作，比如关闭mysql连接等等
+            print("This would be printed whether or not an exception occurred!")
+
 
 ```
 
 ### 2）使用场合:
    1. 在for循环中采用try catch来提高效率，避免if条件判断的性能损失
+   2. 处理多个异常时，可以采用所有可能发生的异常放到一个元组里，或者是对每个单独的异常在单独的except语句块中处理
+   3. 包裹到finally从句中的代码不管异常是否触发都将会被执行。这可以被用来在脚本执行之后做清理工作。
+   4. 在没有触发异常的时候执行一些代码。这可以很轻松地通过一个else从句来达到，else从句只会在没有异常的情况下执行，而且它会在finally语句之前执行
+
+## 17、lambda 表达式
+### 1） 基本用法
+   1. lambda表达式是一行函数，也叫做匿名函数。格式:lambda 参数:操作(参数) , 就是一个函数，但这个函数只是临时使用一下的简单函数。
+
+### 2）使用场合:
+   1. 简化代码逻辑
+   2. 常和map,filter ,reduce这些关键字一起使用
 
