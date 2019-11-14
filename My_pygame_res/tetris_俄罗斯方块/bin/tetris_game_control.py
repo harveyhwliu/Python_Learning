@@ -2,9 +2,8 @@
 #-*- coding:utf8 -*-
 import pygame
 from game_view import TetrisGameView
-from common_method import ICommonMethod
 
-class TetrisGameController(ICommonMethod):
+class TetrisGameController(object):
     """
     俄罗斯方块游戏控制类
     负责游戏的产生、结束等
@@ -109,7 +108,8 @@ class TetrisGameController(ICommonMethod):
         params = {"bg_color":self.__bg_color,"margin_top":self.__windows_margin_top,"margin_left":self.__windows_margin_left,
                   "margin_right":self.__windows_margin_right,"margin_bottom":self.__windows_margin_bottom,"block_size":self.__block_size,
                   "border_color":self.__border_color,"border_width":self.__border_width,"game_show_area_width":self.__game_show_area_width,
-                  "game_show_area_height":self.__game_show_area_height,"game_datas_area_width":self.__game_datas_area_width}
+                  "game_show_area_height":self.__game_show_area_height,"game_datas_area_width":self.__game_datas_area_width,
+                  "game_all_width":self.__all_width,"game_all_height":self.__all_height}
 
         return params
 
@@ -137,7 +137,6 @@ class TetrisGameController(ICommonMethod):
             game_model.handler()
 
             # clock.tick(10)
-            # nightmare  =  self.construct_bg_image(game_windows_size)
             #
             # #显示背景
             # self.game_screen.blit(nightmare, (0,0))

@@ -3,49 +3,102 @@
 
 import pygame
 from pygame.locals import *
-from birds import Bird
-from pipeline import Pipeline
+import sys
+import random
 
+#全局配置
+pygame.init()                            # 初始化pygame
+pygame.font.init()                       # 初始化字体
+font = pygame.font.SysFont("Arial", 50)  # 设置字体和大小
+size = width, height = 288, 512          # 设置窗口
+screen = pygame.display.set_mode(size)   # 显示窗口
+score = 0
+background = pygame.image.load(r"../resources/flybird/bg_day.png")  # 加载背景图片
 
-def createMap():
+class Bird(object):
+    """定义一个鸟类"""
+    def __init__(self):
+        """定义初始化方法"""
+        self.birdRect = pygame.Rect(65, 50, 50, 50)  # 鸟的矩形
+        # 定义鸟的3种状态列表
+        self.birdStatus = [pygame.image.load(r"../resources/flybird/bird0_0.png"),
+                           pygame.image.load(r"../resources/flybird/bird0_1.png"),
+                           pygame.image.load(r"../resources/flybird/bird0_2.png")]
+        self.status = 0      # 默认飞行状态
+        self.birdX = 120     # 鸟所在X轴坐标,即是向右飞行的速度
+        self.birdY = 250     # 鸟所在Y轴坐标,即上下飞行高度
+        self.jump = False    # 默认情况小鸟自动降落
+        self.jumpSpeed = 10  # 跳跃高度
+        self.gravity = 5     # 重力
+        self.dead = False    # 默认小鸟生命状态为活着
+
+    def birdUpdate(self):
+        if self.jump:
+            # 小鸟跳跃
+            self.jumpSpeed -= 1           # 速度递减，上升越来越慢
+            self.birdY -= self.jumpSpeed  # 鸟Y轴坐标减小，小鸟上升
+        else:
+            # 小鸟坠落
+            self.gravity += 0.2           # 重力递增，下降越来越快
+            self.birdY += self.gravity    # 鸟Y轴坐标增加，小鸟下降
+        self.birdRect[1] = self.birdY     # 更改Y轴位置
+
+class Pipeline(object):
+    """定义一个管道类"""
+    def __init__(self):
+        """定义初始化方法"""
+        self.wallx = 150  # 管道所在X轴坐标
+        self.pineUp =   pygame.image.load(r"../resources/flybird/pipe_up.png")
+        self.pineDown = pygame.image.load(r"../resources/flybird/pipe_down.png")
+
+    def updatePipeline(self):
+        """"管道移动方法"""
+        self.wallx -= 5  # 管道X轴坐标递减，即管道向左移动
+        # 当管道运行到一定位置，即小鸟飞越管道，分数加1，并且重置管道
+        if self.wallx < -80:
+            global score
+            score += 1
+            self.wallx = 150
+
+def createMap(pipeline,bird):
     """定义创建地图的方法"""
     screen.fill((255, 255, 255))     # 填充颜色
     screen.blit(background, (0, 0))  # 填入到背景
 
     # 显示管道
-    screen.blit(Pipeline.pineUp, (Pipeline.wallx, -300))   # 上管道坐标位置
-    screen.blit(Pipeline.pineDown, (Pipeline.wallx, 500))  # 下管道坐标位置
-    Pipeline.updatePipeline()  # 管道移动
+    screen.blit(pipeline.pineUp, (pipeline.wallx, -300))   # 上管道坐标位置
+    screen.blit(pipeline.pineDown, (pipeline.wallx, 500))  # 下管道坐标位置
+    pipeline.updatePipeline()  # 管道移动
 
     # 显示小鸟
-    if Bird.dead:              # 撞管道状态
-        Bird.status = 2
-    elif Bird.jump:            # 起飞状态
-        Bird.status = 1
-    screen.blit(Bird.birdStatus[Bird.status], (Bird.birdX, Bird.birdY))              # 设置小鸟的坐标
-    Bird.birdUpdate()          # 鸟移动
+    if bird.dead:              # 撞管道状态
+        bird.status = 2
+    elif bird.jump:            # 起飞状态
+        bird.status = 1
+    screen.blit(bird.birdStatus[bird.status], (bird.birdX, bird.birdY))              # 设置小鸟的坐标
+    bird.birdUpdate()          # 鸟移动
 
     # 显示分数
     screen.blit(font.render('Score:' + str(score), -1, (255, 255, 255)), (100, 50))  # 设置颜色及坐标位置
     pygame.display.update()    # 更新显示
 
 
-def checkDead():
+def checkDead(pipeline,bird):
     # 上方管子的矩形位置
-    upRect = pygame.Rect(Pipeline.wallx, -300,
-                         Pipeline.pineUp.get_width() - 10,
-                         Pipeline.pineUp.get_height())
+    upRect = pygame.Rect(pipeline.wallx, -100,
+                         pipeline.pineUp.get_width() - 10,
+                         pipeline.pineUp.get_height())
 
     # 下方管子的矩形位置
-    downRect = pygame.Rect(Pipeline.wallx, 500,
-                           Pipeline.pineDown.get_width() - 10,
-                           Pipeline.pineDown.get_height())
+    downRect = pygame.Rect(pipeline.wallx, 400,
+                           pipeline.pineDown.get_width() - 10,
+                           pipeline.pineDown.get_height())
     # 检测小鸟与上下方管子是否碰撞
-    if upRect.colliderect(Bird.birdRect) or downRect.colliderect(Bird.birdRect):
-        Bird.dead = True
+    if upRect.colliderect(bird.birdRect) or downRect.colliderect(bird.birdRect):
+        bird.dead = True
     # 检测小鸟是否飞出上下边界
-    if not 0 < Bird.birdRect[1] < height:
-        Bird.dead = True
+    if not 0 < bird.birdRect[1] < height:
+        bird.dead = True
         return True
     else:
         return False
@@ -65,33 +118,24 @@ def getResutl():
 
 def start_game():
     """主程序"""
-    pygame.init()                            # 初始化pygame
-    pygame.font.init()                       # 初始化字体
-    font = pygame.font.SysFont("Arial", 50)  # 设置字体和大小
-    size = width, height = 288, 512          # 设置窗口
-    screen = pygame.display.set_mode(size)   # 显示窗口
+    pipeline = Pipeline()                    # 实例化管道类
+    bird = Bird()                            # 实例化鸟类
     clock = pygame.time.Clock()              # 设置时钟
-    score = 0
-    Pipeline = Pipeline()               # 实例化管道类
-
-    Bird = Bird()                            # 实例化鸟类
-
     while True:
-        clock.tick(60)                       # 每秒执行60次
+        clock.tick(20)                       # 每秒执行60次
         # 轮询事件
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
-            if (event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN) and not Bird.dead:
-                Bird.jump = True             # 跳跃
-                Bird.gravity = 5             # 重力
-                Bird.jumpSpeed = 10          # 跳跃速度
-
-        background = pygame.image.load("assets/background.png")  # 加载背景图片
-        if checkDead():                      # 检测小鸟生命状态
+            if (event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN) and not bird.dead:
+                bird.jump = True             # 跳跃
+                bird.gravity = 5             # 重力
+                bird.jumpSpeed = 10          # 跳跃速度
+        background = pygame.image.load(r"../resources/flybird/bg_day.png")  # 加载背景图片
+        if checkDead(pipeline,bird):                      # 检测小鸟生命状态
             getResutl()                      # 如果小鸟死亡，显示游戏总分数
         else:
-            createMap()                      # 创建地图
+            createMap(pipeline,bird)                      # 创建地图
     pygame.quit()
 
 

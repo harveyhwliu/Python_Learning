@@ -1,35 +1,25 @@
-#!/usr/local/bin/python
-# -*- coding:utf8 -*-
-
 import pygame
 from pygame.locals import *
 
 
-class Bird(object):
-    """定义一个鸟类"""
+class Pipeline(object):
+    """定义一个管道类"""
 
-    def __init__(self):
+    def __init__(self,score):
         """定义初始化方法"""
-        self.birdRect = pygame.Rect(65, 50, 50, 50)  # 鸟的矩形
-        # 定义鸟的3种状态列表
-        self.birdStatus = [pygame.image.load(r"../resources/bird0_0.png"),
-                           pygame.image.load(r"../resources/bird0_1.png"),
-                           pygame.image.load(r"../resources/bird0_2.png")]
-        self.status = 0      # 默认飞行状态
-        self.birdX = 120     # 鸟所在X轴坐标,即是向右飞行的速度
-        self.birdY = 350     # 鸟所在Y轴坐标,即上下飞行高度
-        self.jump = False    # 默认情况小鸟自动降落
-        self.jumpSpeed = 10  # 跳跃高度
-        self.gravity = 5     # 重力
-        self.dead = False    # 默认小鸟生命状态为活着
+        self.wallx = 400  # 管道所在X轴坐标
+        self.score = score    #  得分
+        self.pineUp = pygame.image.load(r"../resources/pipe_down.png")
+        self.pineDown = pygame.image.load(r"../resources/pipe_down.png")
 
-    def birdUpdate(self):
-        if self.jump:
-            # 小鸟跳跃
-            self.jumpSpeed -= 1           # 速度递减，上升越来越慢
-            self.birdY -= self.jumpSpeed  # 鸟Y轴坐标减小，小鸟上升
-        else:
-            # 小鸟坠落
-            self.gravity += 0.2           # 重力递增，下降越来越快
-            self.birdY += self.gravity    # 鸟Y轴坐标增加，小鸟下降
-        self.birdRect[1] = self.birdY     # 更改Y轴位置
+    def updatePipeline(self):
+        """"管道移动方法"""
+        self.wallx -= 5  # 管道X轴坐标递减，即管道向左移动
+        # 当管道运行到一定位置，即小鸟飞越管道，分数加1，并且重置管道
+        if self.wallx < -80:
+            self.score += 1
+            self.wallx = 400
+
+    def get_score(self):
+        """获取得分"""
+        return self.score

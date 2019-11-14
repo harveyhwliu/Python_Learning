@@ -1,6 +1,3 @@
-#!/usr/local/bin/python
-# -*- coding:utf8 -*-
-
 import pygame
 from pygame.locals import *
 

@@ -107,7 +107,7 @@
    1. 不改变原来函数的基础上，加上一些新的功能，比如日志，耗时分析等等
    2. 实际应用举例： 计算函数耗时时间的装饰器
 
-   ``
+   `
 
     def decorator_calc_cost_time(func):  #装饰器的名字
         start_time = time.time()
@@ -125,12 +125,12 @@
         print("I am function3()")
         time.sleep(a*b)
 
-    ``
+    `
 
     3. 业务应用场景： web应用端点（endpoint）的访问鉴权（Flask和Django web框架）
     4. @wraps 也是装饰器，但他仅接收一个参数，就像任何普通函数那样为什么我们不这样做呢？  因为当使用@my_decorator语法时，是在应用一个以单个函数作为参数的一个包裹函数。举例如下：
 
-    ``
+    `
     #创建一个包裹函数
     def logit(logfile='out.log'):
         def logging_decorator(func):
@@ -151,7 +151,7 @@
     def my_test2():
         pass
 
-    ``
+    `
 
 
 
