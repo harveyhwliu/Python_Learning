@@ -561,3 +561,27 @@
    
 ### 2）使用场合:
    1. 使用with open() as fd 这种方式的处理文件操作
+
+
+## 22、开发兼容Python2，3的程序
+### 1） 基本用法
+   1. 第一种也是最重要的方法，就是导入__future__模块。它可以帮你在Python2中导入Python3的功能。
+   - from __future__ import print_function #导入print函数 <built-in function print>
+   2. 脚本中对模块进行重命名,将模块导入代码包装在try/except语句中。导入失败后会引起引起一个ImportError异常。捕获到ImportError我们将通过导入正确的模块来代替它
+
+   ```python
+    try:
+        import urllib.request as urllib_request     # for Python 3
+    except ImportError:
+        import urllib2 as urllib_request            # for Python 2
+    print(urllib_request.localhost())
+    
+    
+```
+
+   3. 了解Python2中有12个内置功能在Python3中已经被移除了。要确保在Python2代码中不要出现这些功能来保证对Python3的兼容。
+   - 这有一个强制让你放弃12内置功能的方法：`from future.builtins.disabled import *` 
+   
+   
+### 2）使用场合:
+   1. 脚本同时兼容Python2和Python3 
