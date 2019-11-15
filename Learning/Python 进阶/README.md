@@ -533,3 +533,31 @@
    4. ctypes 只能使用一个简单的场合，但其功能很受限。例如，并不能在C中对对象进行操作
    5. 如果c的代码可以被多种语言使用，可以采用swig的方式
    6.
+
+
+## 21、open 的使用
+### 1） 基本用法
+   1.  with  open(file_name,'a') as fd:  可以规避几个问题：
+   - 不需要显示的调用fd.close()关闭文件句柄
+   - 避免采用文本模式写入时，没有调用flush()导致数据实际没有写入的问题
+   2. 关于文件的编码，在Pyhon 2中，open不支持显示地指定编码。然而，io.open函数在Python 2.x中和3.x(其中它是open的别名)中都有提供，它能做正确的事。你可以传入encoding这个关键字参数来传入编码。
+
+   ```python
+    import io
+
+    with open('th.jpeg', 'rb') as inf:
+        jpgdata = inf.read()
+
+    if jpgdata.startswith(b'\xff\xd8'):
+        text = u'This is a JPEG file (%d bytes long)\n'
+    else:
+        text = u'This is a random file (%d bytes long)\n'
+
+    with io.open('summary.txt', 'w', encoding='utf-8') as outf:
+        outf.write(text % len(jpgdata))
+
+```
+
+   
+### 2）使用场合:
+   1. 使用with open() as fd 这种方式的处理文件操作
