@@ -26,6 +26,7 @@
    6. python3取消了python2中dict的if _dict_obj.has_key(key)的方法，python3中使用if key in _dict_obj:
    7. python3 dict没有iteritems(),只能使用items()
    8. python2 中tuple用()来定义，python3中使用{}来定义
+   9. 对于生成器generator c来说,python 2 可以使用c.next() 但是python3 只能使用next(c)
 
 ## 2、*args 和 **kwargs的区别
 ### 1） 基本用法
@@ -607,8 +608,8 @@
                 print("Find Res: {}".format(line))
     def main():
         search = test_demo1('coroutine')
-        next(search)                #通过next()方法来响应send()方法。因此，你必须通过next()方法来执行yield表达式
-        search.send("I love you")   #我们可以通过send()方法向它传值,发送的值会被yield接收
+        next(search)                #通过next()方法来响应send()方法。因此，你必须通过next()方法来执行yield表达式,即启动生成器
+        search.send("I love you")   #我们可以通过send()方法向它传值,发送的值会被yield接收，进行函数间切换
         search.send("Don't you love me?")
         search.send("I love coroutine instead!")
         print(search)               #<generator object test_demo1 at 0x1009fcd68> 显示是一个生成器
@@ -630,7 +631,7 @@
             r = '200 OK'
 
     def produce(c):
-        c.next()     #通过next()启动生成器
+        next(c)     #通过next()启动生成器,python 2 可以使用c.next() 但是python3 只能使用next(c)
         n = 0
         while n < 5:
             n = n + 1
@@ -643,9 +644,71 @@
         c = consumer()
         produce(c)
 
+```
+
 ### 2）使用场合:
    1. 协程极高的执行效率。因为子程序切换不是线程切换，而是由程序自身控制，因此，没有线程切换的开销，和多线程比，线程数量越多，协程的性能优势就越明显
    2. 不需要多线程的锁机制，因为只有一个线程，也不存在同时写变量冲突，在协程中控制共享资源不加锁，只需要判断状态就好了，所以执行效率比多线程高很多
    3. 协程是一个线程执行，那怎么利用多核CPU呢？最简单的方法是多进程+协程，既充分利用多核，又充分发挥协程的高效率，可获得极高的性能。
    4. 多线程就是协程的一种特例
+
+## 24、function caching函数缓存
+### 1） 基本用法
+   1. 函数缓存允许我们将一个函数对于给定参数的返回值缓存起来，在Python 3.2版本以前我们只有写一个自定义的实现。在Python 3.2以后版本，有个`lru_cache`的装饰器，允许我们将一个函数的返回值快速地缓存或取消缓存。
+
+   ```python
+    #针对python 3.2以后的版本，采用lru_cache实现
+    from functools import lru_cache
+    @lru_cache(maxsize=32)  #maxsize参数是告诉lru_cache，最多缓存最近多少个返回值
+    def test_demo1(n):
+        if n<2:
+            return n
+        return test_demo1(n-1) + test_demo1(n-2)
+
+    def test_demo2():
+        pass
+
+    def main():
+        print(test_demo1(100))
+        test_demo1.cache_clear()  #对返回值进行清空
+        print(test_demo1)
+        test_demo2()
+        test_demo1.cache_clear()  #对返回值进行清空
+        print(test_demo2)
+```
+
+   ```python
+    #通过装饰器，自己来实现,可以创建任意类型的缓存机制。
+    from functools import wraps
+
+    def my_lru_cache(function):
+        memo = {}
+        @wraps(function)
+        def wrapped_function(*args,**kwargs):
+            if args in memo:
+                return memo[args]
+            else:
+                rv = function(*args,**kwargs)
+                memo[args] = rv
+                return rv
+        return wrapped_function
+
+    @my_lru_cache
+    def test_demo1(n):
+        if n<2:
+            return n
+        return test_demo1(n-1) + test_demo1(n-2)
+
+    def test_demo2():
+        pass
+
+    def main():
+        print(test_demo1(100))
+        print(test_demo1)
+        test_demo2()
+        print(test_demo2)
+```
+
+### 2）使用场合:
+   1. 当一个I/O密集的函数被频繁使用相同的参数调用的时候，函数缓存可以节约时间
 
