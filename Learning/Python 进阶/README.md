@@ -712,3 +712,79 @@
 ### 2）使用场合:
    1. 当一个I/O密集的函数被频繁使用相同的参数调用的时候，函数缓存可以节约时间
 
+
+
+## 25、Context managers 上下文管理器
+### 1） 基本用法
+   1. 上下文管理器最广泛的案例就是with语句了，with open(file_name, 'w') as fd:下面的代码是等效的
+
+   ```python
+   #通过使用with，许多样板代码(boilerplate code)被消掉了。 这就是with语句的主要优势，它确保我们的文件会被关闭，而不用关注嵌套代码如何退出
+    def test_demo1():
+        with open('test1.log', 'w') as fd:
+            # raise Exception("test")  #测试1， 创建文件，不写入内容
+            fd.write('hello world!')
+            # raise Exception("test2")  #测试2， 创建文件，写入内容
+
+
+    def test_demo2():
+        fd = open("test2.log",'w')
+        try:
+            # raise Exception("test")  ##测试1， 创建文件，不写入内容
+            fd.write('hello world!')
+            raise Exception("test2")  #测试2， 创建文件，写入内容
+        finally:
+            fd.close()
+```
+
+   2. 一个上下文管理器的类，最起码要定义__enter__和__exit__方法,对照下面的代码，看看底层都发生了什么。
+   -. with语句先暂存了File类的__exit__方法,然后它调用File类的__enter__方法
+   -. __enter__方法打开文件并返回给with语句,打开的文件句柄被传递给opened_file参数
+   -. 我们使用.write()来写文件完成后,with语句调用之前暂存的__exit__方法
+   -. __exit__方法关闭了文件,__exit__方法的这三个参数：type, value和traceback。
+   -. 如果发生异常，Python会将异常的type,value和traceback传递给__exit__方法,它让__exit__方法来处理异常
+   -. 如果__exit__返回的是True，那么这个异常就被优雅地处理了。如果__exit__返回的是True以外的任何东西，那么这个异常将被with语句抛出
+
+   ```python
+    class MyFileClass(object):
+        def __init__(self,file_name,method):
+            self.__dict__.update({k:v for k,v in locals().items() if k !='self'})
+            self._fd = open(self.file_name,self.method)
+
+        def __enter__(self):
+            return self._fd
+
+        def __exit__(self, exc_type, exc_val, exc_tb):
+            self._fd.close()
+            return True  #返回True，表明这个中间出现的异常已经被优雅的处理掉了，如果返回其他（非True）,异常则会被with 抛出到上一层
+
+    def test_demo3():
+        with MyFileClass('test3.log','w') as fd:
+            # raise Exception("test")  ##测试1， 创建文件，不写入内容
+            fd.write("hello world!")
+            raise Exception("test2")  #测试2， 创建文件，写入内容
+
+```
+
+   3. 通过装饰器（decorators） 和 生成器 （generators）来实现上下文管理器。python 有专门的contextlib模块，用来生成一个上下文管理器，而不是使用类。
+
+   ```python
+    from contextlib import contextmanager
+
+    @contextmanager
+    def test_demo1(file_name,mode):
+        f = open(file_name,mode)
+        yield f
+        f.close()
+
+    def main():
+        with test_demo1('test2_1.log', 'w') as fd:
+            fd.write("hello world!")
+
+```
+
+
+### 2）使用场合:
+   1. 上下文管理器允许你在有需要的时候，精确地分配和释放资源
+   2. 上下文管理器的常见用例，是资源的加锁和解锁，以及关闭已打开的文件
+
