@@ -577,7 +577,6 @@
         import urllib2 as urllib_request            # for Python 2
     print(urllib_request.localhost())
     
-    
 ```
 
    3. 了解Python2中有12个内置功能在Python3中已经被移除了。要确保在Python2代码中不要出现这些功能来保证对Python3的兼容。
@@ -592,3 +591,61 @@
    
 ### 2）使用场合:
    1. 脚本同时兼容Python2和Python3 
+
+
+## 23、协程的使用
+### 1） 基本用法
+   1. Python中的协程和生成器很相似但又稍有不同。主要区别在于： 生成器是数据的生产者 协程则是数据的消费者
+   2. 使用yield便可获得了一个协程。协程会消费掉发送给它的值。用yield接收send()发送的值，用next()发放启动协程，用close()方法关闭一个协程
+
+   ```python
+    def test_demo1(pattern):
+        print("Searching For {}".format(pattern))
+        while True:
+            line = (yield)
+            if pattern in line:
+                print("Find Res: {}".format(line))
+    def main():
+        search = test_demo1('coroutine')
+        next(search)                #通过next()方法来响应send()方法。因此，你必须通过next()方法来执行yield表达式
+        search.send("I love you")   #我们可以通过send()方法向它传值,发送的值会被yield接收
+        search.send("Don't you love me?")
+        search.send("I love coroutine instead!")
+        print(search)               #<generator object test_demo1 at 0x1009fcd68> 显示是一个生成器
+        search.close()              #通过close()方法来关闭一个协程
+
+```
+
+   ```python
+    import time
+    #生产者消费者模型
+    def consumer():
+        r = ''
+        while True:
+            n = yield r
+            if not n:
+                return
+            print('[CONSUMER] Consuming %s...' % n)
+            time.sleep(1)
+            r = '200 OK'
+
+    def produce(c):
+        c.next()     #通过next()启动生成器
+        n = 0
+        while n < 5:
+            n = n + 1
+            print('[PRODUCER] Producing %s...' % n)
+            r = c.send(n)   #切换到consumer中执行
+            print('[PRODUCER] Consumer return: %s' % r)
+        c.close()
+
+    if __name__=='__main__':#整个流程无锁，由一个线程执行，produce和consumer协作完成任务，所以称为“协程”，而非线程的抢占式多任务。
+        c = consumer()
+        produce(c)
+
+### 2）使用场合:
+   1. 协程极高的执行效率。因为子程序切换不是线程切换，而是由程序自身控制，因此，没有线程切换的开销，和多线程比，线程数量越多，协程的性能优势就越明显
+   2. 不需要多线程的锁机制，因为只有一个线程，也不存在同时写变量冲突，在协程中控制共享资源不加锁，只需要判断状态就好了，所以执行效率比多线程高很多
+   3. 协程是一个线程执行，那怎么利用多核CPU呢？最简单的方法是多进程+协程，既充分利用多核，又充分发挥协程的高效率，可获得极高的性能。
+   4. 多线程就是协程的一种特例
+
