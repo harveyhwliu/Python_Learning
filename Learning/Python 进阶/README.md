@@ -4,6 +4,7 @@
       2. pip install numpy -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
       3. pip install pandas  -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
       4. pip install seaborn scipy==1.2.0  -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
+      5. pip install -t /usr/local/lib/python2.7/site-packages/ future  安装了多版本python时，pip安装的包不一定是用户想要的位置，此时可以用 -t 选项来指定位置
 
    1. Numpy (Numerical python) python 科学计算的基础包
       1. python -m pip list 查看 
@@ -580,8 +581,14 @@
 ```
 
    3. 了解Python2中有12个内置功能在Python3中已经被移除了。要确保在Python2代码中不要出现这些功能来保证对Python3的兼容。
-   - 这有一个强制让你放弃12内置功能的方法：`from future.builtins.disabled import *` 
-   
+   - 这有一个强制让你放弃12内置功能的方法：`from future.builtins.disabled import *`
+   - 需要安装future包，多python 版本时可以采用 -t 来指定安装路径，pip install -t /usr/local/lib/python3.7/site-packages/ future
+   - apply()   在python2 中报错被提示已弃用，python3中报错为未定义
+
+   4. 标准库向下兼容的外部支持。有一些包在非官方的支持下为Python2提供了Python3的功能
+   - `enum` : pip install enum34    #Python 2.x 中是没有原生的枚举类型的,可以使用这个包class BugStatus(enum.Enum):定义枚举类，python3默认已经支持，直接导入import enum即可
+   - `singledispatch` : pip install singledispatch  #提供单分派泛函数，即函数的重载功能
+   - `pathlib` :pip install pathlib #pathlib中的Path类可以创建path路径对象, 属于比os.path更高抽象级别的对象
    
 ### 2）使用场合:
    1. 脚本同时兼容Python2和Python3 
