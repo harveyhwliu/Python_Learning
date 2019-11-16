@@ -1,16 +1,22 @@
 ## 0、重要的Python 库
-   0. 推荐大家使用豆瓣的源
+   0. pip安装包，-i指定源，-t指定安装路径，推荐大家使用豆瓣的源
+
+   ```python
       1. pip install matplotlib==2.2.4  -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
       2. pip install numpy -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
       3. pip install pandas  -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
       4. pip install seaborn scipy==1.2.0  -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
       5. pip install -t /usr/local/lib/python2.7/site-packages/ future  安装了多版本python时，pip安装的包不一定是用户想要的位置，此时可以用 -t 选项来指定位置
+```
 
    1. Numpy (Numerical python) python 科学计算的基础包
+
+   ```python
       1. python -m pip list 查看 
       2. python -m pip install --upgrade pip 更新 
       3. python -m pip install numpy 安装  （使用豆瓣的源）
-     
+```
+
    2. Pandas 快速处理结构化数据的大量数据结构和函数  + DataFrame
       1. 安装前，需要安装Cython或者升级Cython先   pip install Cython
       
@@ -30,20 +36,20 @@
 
 ## 2、*args 和 **kwargs的区别
 ### 1） 基本用法
-   1. 用来给函数传参，标准参数与*args、**kwargs在使用时的顺序为：some_func(fargs1，...fargsn, *args, **kwargs)
+   1. 用来给函数传参，标准参数与*args、**kwargs在使用时的顺序为：`some_func(fargs1，...fargsn, *args, **kwargs)`
    2. *args 和 **kwargs 不是关键字，可以替换成成其他合法变量名
    3. *args 是一个list，可以采用some_func(*args)传递参数，但是这个list的长度必须大于等于some_func的标准形参个数，多余的参数放到函数args中
    4. *kwargs是一个dict,可以采用some_func(**kwargs)传递参数，但这个dict的key必须全部包括some_func形参的名，否则会报错，多余的部分放到函数kwargs这个dict中
 ### 2）使用场合
    1. 不知道用户传递的参数有多少
-   2. monkey patching,只是在程序运行时(runtime)修改某些代码。 打个比方，你有一个类，里面有个叫get_info的函数会调用一个API并返回相应的数据。如果我们想测试它，可以把API调用替换成一些测试数据obj.func = _nws_func
+   2. monkey patching,只是在程序运行时(runtime)修改某些代码。 打个比方，你有一个类，里面有个叫get_info的函数会调用一个API并返回相应的数据。如果我们想测试它，可以把API调用替换成一些测试数据`obj.func = _nws_func`
    3. 最常见的用例是在写函数装饰器的时候
    
 ## 3、 调试代码 pdb
 ### 1） 基本用法
    1. 从命令上执行调试命令：python -m pdb my_script.py，会触发debugger在脚本第一行指令处停止执行。这在脚本很短时会很有帮助。
    2. 可以在脚本内部设置断点，通过首先导入pdb模块，然后在关键点处：使用pdb.set_trace() 设置断点
-   3. 常用pdb命令：   
+   3. 常用pdb命令：
      -. c: continue 或 c	继续执行程序    
      -. w: 显示当前正在执行的代码行的上下文信息  
      -. a: 打印当前函数的参数列表  
@@ -74,9 +80,9 @@
 
 ## 5、 MAP Filter reduce
 ### 1） 基本用法
-   1. Map会将一个函数映射到一个输入列表的所有元素上。这是它的规范：map(function_to_apply, list_of_inputs),举例：list(map(lambda x: x**2, [1,2,3,4,5]))
-   2. filter过滤列表中的元素，并且返回一个由所有符合要求的元素所构成的列表，符合要求即函数映射到该元素时返回值为True,filter(lambda x:x>0,[0,1,2,3])
-   3. 当需要对一个列表进行一些计算并返回结果时，Reduce 是个非常有用的函数,举例：reduce(lambda x,y:x+y,[1,2,3,4,5,6,7,8,9])#求列表的各项元素之和
+   1. Map会将一个函数映射到一个输入列表的所有元素上。这是它的规范：map(function_to_apply, list_of_inputs),举例：`list(map(lambda x: x**2, [1,2,3,4,5]))`
+   2. filter过滤列表中的元素，并且返回一个由所有符合要求的元素所构成的列表，符合要求即函数映射到该元素时返回值为True,`filter(lambda x:x>0,[0,1,2,3])`
+   3. 当需要对一个列表进行一些计算并返回结果时，Reduce 是个非常有用的函数,举例：`reduce(lambda x,y:x+y,[1,2,3,4,5,6,7,8,9])#求列表的各项元素之和`
 
 
 ### 2）使用场合
@@ -84,9 +90,9 @@
 
 ## 6、 set的使用
 ### 1） 基本用法
-   1. set不能包含重复的值,例如对查找重复的元素：print(list(set([x for x in [1,2,3,2] if [1,2,3,2].count(x)>1])))
-   2. set用来求两个序列的交集：print(set(a).intersection(set(b)))
-   3. set用来求两个序列中不交叉的数据集：print(set(a).difference(set(b)))  #在a序列但不在b序列中的元素集
+   1. set不能包含重复的值,例如对查找重复的元素：`print(list(set([x for x in [1,2,3,2] if [1,2,3,2].count(x)>1])))`
+   2. set用来求两个序列的交集：`print(set(a).intersection(set(b)))`
+   3. set用来求两个序列中不交叉的数据集：`print(set(a).difference(set(b)))  #在a序列但不在b序列中的元素集`
 
 
 ### 2）使用场合
@@ -94,8 +100,8 @@
 
 ## 7、python中的三元运算符
 ### 1） 基本用法
-   1. 三元运算符是基于条件表达式真假的条件判断，python2.4以上才支持，举例：x=0 if x in pid_l else pid_l[x]
-   2. 切记使用print((1/0,11)[condition]) 这种元组条件表达式，因为元素是先建立数据，再利用下标索引来查找数据，因此在元组中所有条件都执行
+   1. 三元运算符是基于条件表达式真假的条件判断，python2.4以上才支持，举例：`x=0 if x in pid_l else pid_l[x]`
+   2. 切记使用`print((1/0,11)[condition]) `这种元组条件表达式，因为元素是先建立数据，再利用下标索引来查找数据，因此在元组中所有条件都执行
 
 ### 2）使用场合
    1. 省略多余的if表达式，可以使代码简单可维护
@@ -104,8 +110,8 @@
 ## 8、decorators 装饰器
 ### 1） 基本用法
    1. decorators 是修改其他函数的功能的函数。他们有助于让在对已有函数进行功能扩充，也更Pythonic（Python范儿）
-   2. 可以在函数中定义另外的函数。也就是说：我们可以创建嵌套的函数,并可以在外层函数中返回其内内嵌函数；函数也可以作为实参传递给另外函数的形参例如printNum(getNum)，这里getNum是一个函数
-   3. 直接采用函数内嵌的方式返回，发现采用注解前后，本质上是函数的名字和注释文档docstring已经发生了重写。使用from functools import wraps 中@wraps(func)  @wraps接受一个函数来进行装饰，并加入了复制函数名称、注释文档、参数列表等等的功能。这可以让我们在装饰器里面访问在装饰之前的函数的属性。
+   2. 可以在函数中定义另外的函数。也就是说：我们可以创建嵌套的函数,并可以在外层函数中返回其内内嵌函数；函数也可以作为实参传递给另外函数的形参例如`printNum(getNum) #这里getNum是一个函数`
+   3. 直接采用函数内嵌的方式返回，发现采用注解前后，本质上是函数的名字和注释文档docstring已经发生了重写。使用`from functools import wraps 中@wraps(func)  `@wraps接受一个函数来进行装饰，并加入了复制函数名称、注释文档、参数列表等等的功能。这可以让我们在装饰器里面访问在装饰之前的函数的属性。
 
 ### 2）使用场合
    1. 不改变原来函数的基础上，加上一些新的功能，比如日志，耗时分析等等
@@ -214,7 +220,7 @@
 ### 1） 基本用法
    1. Python中，每个类都有实例属性。默认情况下Python用一个字典来保存一个对象的实例属性，一方面，它允许我们在运行时去设置任意的新属性，另一方面，对于那些已知属性的小类来说，会浪费很多内存。
    2. 可以使用__slots__(插槽)告诉python 不使用字典而且只给一个固定集合的属性分配空间
-   3. 可以时候用dir(对象),或者inspect模块（import inspect） inspect.getmember(对象)  查看对象属性，发现少了 __dict__ 属性
+   3. 可以时候用dir(对象),或者inspect模块（`import inspect`） inspect.getmember(对象)  查看对象属性，发现少了 __dict__ 属性
 
 ### 2）使用场合: 针对那些对内存比较在意的程序，但也存在如下的缺点：
    1. 每个继承的子类都要重新定义一遍__slots__
@@ -272,7 +278,7 @@
    - dir  : dir([1,2,3]),如果运行dir()而不传入参数，那么它会返回当前作用域的所有名字
    - type : type 函数返回一个对象的类型  type(dict)
    - id :   id()函数返回任意不同种类对象的唯一ID
-   - inspect:获取活跃对象的信息,比如对象的成员等  import inspect，print(inspect.getmembers(str))
+   - inspect:获取活跃对象的信息,比如对象的成员等  `import inspect;print(inspect.getmembers(str))`
 
 ### 2）使用场合:
    1. 了解当前可用的函数，或者了解对象自身等场景
@@ -280,13 +286,13 @@
 ## 15、comprehensions 推导式
 ### 1） 基本用法
    1.  推导式是可以从一个数据序列构建另一个新的数据序列的结构体。 共有三种推导
-   - 列表(list)推导式 ：list comprehensions 格式：variable = [out_exp for out_exp in input_list if out_exp == 2]
-   - 字典(dict)推导式 : dict comprehensions 格式：统计字典中key的频数- mcase={'a':1,'A':2,'c':3}；{k.lower(): mcase.get(k.lower(), 0) + mcase.get(k.upper(), 0) for k in mcase.keys()}
-   - 集合(set)推导式  : set comprehensions  格式：(x**2 for x in [1, 1, 2])  python3要改为{x**2 for x in [1, 1, 2]},否则返回的就是generator
+   - 列表(list)推导式 ：list comprehensions 格式：`variable = [out_exp for out_exp in input_list if out_exp == 2]`
+   - 字典(dict)推导式 : dict comprehensions 格式：统计字典中key的频数- `mcase={'a':1,'A':2,'c':3}；{k.lower(): mcase.get(k.lower(), 0) + mcase.get(k.upper(), 0) for k in mcase.keys()}`
+   - 集合(set)推导式  : set comprehensions  格式：`(x**2 for x in [1, 1, 2])`  python3要改为`{x**2 for x in [1, 1, 2]}`,否则返回的就是generator
 
 ### 2）使用场合:
-   1. list comprehensions 在当你需要使用for循环来生成一个新列表使用，例如：squared = [x**2 for x in range(10)]
-   2. dict comprehensions 快速替换value:key  {v:k for k,v in {"a":1,"b":2}.items()}
+   1. list comprehensions 在当你需要使用for循环来生成一个新列表使用，例如：`squared = [x**2 for x in range(10)]`
+   2. dict comprehensions 快速替换value:key  `{v:k for k,v in {"a":1,"b":2}.items()}`
 
 ## 16、异常
 ### 1） 基本用法
@@ -324,11 +330,11 @@
 
 ## 18、一行式
 ### 1） 基本用法
-   1. 打印语句： from pprint import pprint;pprint([1,2,3,4])
-   2. 快速漂亮的从文件打印出json数据  cat json.json | python -m json.tool
-   3. 脚本性能分析： python -m cProfile my_script.py  #cProfile是一个比profile更快的实现，因为它是用c写的 TODO: 这里以后才补充
-   4. CSV转换为json ：python -c "import csv,json;print json.dumps(list(csv.reader(open('csv_file.csv'))))"
-   5. 列表辗平：使用itertools包中的itertools.chain.from_iterable轻松快速的辗平一个列表  list(itertools.chain.from_iterable([[1, 2], [3, 4], [5, 6]]))
+   1. 打印语句： `from pprint import pprint;pprint([1,2,3,4])`
+   2. 快速漂亮的从文件打印出json数据  `cat json.json | python -m json.tool`
+   3. 脚本性能分析： `python -m cProfile my_script.py ` #cProfile是一个比profile更快的实现，因为它是用c写的 TODO: 这里以后才补充
+   4. CSV转换为json ：`python -c "import csv,json;print json.dumps(list(csv.reader(open('csv_file.csv'))))"`
+   5. 列表辗平：使用itertools包中的itertools.chain.from_iterable轻松快速的辗平一个列表  `list(itertools.chain.from_iterable([[1, 2], [3, 4], [5, 6]]))`
    6. 快速给类初始化，避免大量的赋值语句
 
    ```python
