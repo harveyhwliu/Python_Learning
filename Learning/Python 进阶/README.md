@@ -409,37 +409,53 @@
 ```
 
    - SWIG：SWIG是Simplified Wrapper and Interface Generator的缩写
-   1） 在这个方法中，开发人员必须编写一个额外的接口文件来作为SWIG(终端工具)的入口。
-   2） Python开发者一般不会采用这种方法，因为大多数情况它会带来不必要的复杂。
-   3)  而当你有一个C/C++代码库需要被多种语言调用时，这将是个非常不错的选择
+   1）在这个方法中，开发人员必须编写一个额外的接口文件来作为SWIG(终端工具)的入口。
+   2）Python开发者一般不会采用这种方法，因为大多数情况它会带来不必要的复杂。
+   3) 而当你有一个C/C++代码库需要被多种语言调用时，这将是个非常不错的选择
+   4) 共需要写3个文件分别是：swig.c swig.h swig.i
 
    ```c
-   //----------------未经过测试 ----------------
+   //----------------swig.c ----------------
     #include <time.h>
     double My_variable = 3.0;
 
     int fact(int n) {
         if (n <= 1) return 1;
         else return n*fact(n-1);
-
     }
 
     int my_mod(int x, int y) {
         return (x%y);
-
     }
 
-    char *get_time()
-    {
+    char *get_time(){
         time_t ltime;
         time(&ltime);
         return ctime(&ltime);
     }
+    //----------------swig.h ----------------
+    int fact(int n);
+    int my_mod(int x, int y);
+    char *get_time();
+
+    //----------------swig.i ----------------
+    %module swig
+
+    %{
+    #include <time.h>
+    %}
+
+    extern int fact(int n);
+    extern int my_mod(int x, int y);
+    extern char *get_time();
+
 
     //swig 进行编译
-    swig -python example.i
-    gcc -c example.c example_wrap.c  -I/usr/local/include/python2.1
-    ld -shared example.o example_wrap.o -o _example.so
+    swig -python swig.i  #生成swig_wrap.c 以及 swig.py (名字是%module后面的),是扩展C++ 则再加一个-c++ 即 swig -c++ -python swig.i
+    //生成swig.o,swig_wrap.o ,-I 指定python的include,通常是/usr/local/include/python2.7
+    gcc -c swig.c swig_wrap.c  -I/usr/local//Cellar/python/3.7.3/Frameworks/Python.framework/Versions/3.7/include/python3.7m
+
+    ld -dynamiclib -o _swig.so swig.o  swig_wrap.o  //上面是mac下的，linux下可以使用 ld -shared swig.o swig_wrap.o -o _swig.so
 
     //python 输出：
     >>> import example
@@ -459,8 +475,7 @@
    ```c  python
 
         #include <Python.h>
-        //Python.h头文件中包含了所有需要的类型(Python对象类型的表示)和函数定义(对Python对象的操作)
-
+        //Python.h头文件中包含了所有需要的类型(Python对象类型的表示)和函数定义(对Python对象的操作),安装`python-dev，这是Python的头文件和静态库包`
         //编写将要在Python调用的函数, 函数传统的命名方式由{模块名}_{函数名}组成，所以我们将其命名为addList_add
         //参数类型为PyObject类型结构(同时也表示为元组类型，因为Python中万物皆为对象，所以我们先用PyObject来定义)
         static PyObject* addList_add(PyObject* self, PyObject* args){

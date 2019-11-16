@@ -3,13 +3,8 @@
 # import sys
 # reload(sys)   #python3 不支持这种
 # sys.setdefaultencoding('utf8')
-from pprint import pprint
-import itertools
-import inspect
-from pprint import pprint
-
-
 from ctypes import *
+import _swig_demo
 
 def test_demo1():
     adder = CDLL('./adder.so')                    #加载dll
@@ -22,20 +17,22 @@ def test_demo1():
 
 
 def test_demo2():
+
+    print(swig_demo.fact(5))
+
+def test_demo3():
     #module that talks to the C code
     import addList
     l = [1,2,3,4,5]
     print("Sum of List - " + str(l) + " = " +  str(addList.add(l)))
 
-def test_demo3():
-    pass
 
 
 
 def main():
     # test_demo1()
     test_demo2()
-    test_demo3()
+    # test_demo3()
 
 if __name__ == "__main__":
     main()
