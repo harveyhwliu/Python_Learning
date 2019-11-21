@@ -1,0 +1,11 @@
+*.log
+/runtime
+/vendor
+/.idea
+*.pyc
+*.png
+*.jpg
+*.bmp
+*.tif
+*.gif
+*/img/*
