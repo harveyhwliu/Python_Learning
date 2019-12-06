@@ -13,7 +13,7 @@
 
    ```python
       1. python -m pip list 查看 
-      2. python -m pip install --upgrade pip 更新 
+      2. python -m pip install --upgrade pip 更新   #pip install -U numpy  (numpy的一些新方法，例如quantile 方法，需要升级numpy版本)
       3. python -m pip install numpy 安装  （使用豆瓣的源）
 ```
 
