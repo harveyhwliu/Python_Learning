@@ -6,5 +6,5 @@
 
 ### 003PythonCodeStandards
 &emsp;&emsp;Python 编码规范与风格,基于pep8 中包含的内容,是腾讯内部的python编码规范
-![腾讯python编码规范](http://git.code.oa.com/standards/python.git)
+[腾讯python编码规范](http://git.code.oa.com/standards/python.git)
 
