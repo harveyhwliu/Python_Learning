@@ -1,5 +1,0 @@
-*.log
-/runtime
-/vendor
-/.idea
-*.pyc
