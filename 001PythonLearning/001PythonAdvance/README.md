@@ -7,13 +7,14 @@
       3. pip install pandas  -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
       4. pip install seaborn scipy==1.2.0  -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
       5. pip install -t /usr/local/lib/python2.7/site-packages/ future  安装了多版本python时，pip安装的包不一定是用户想要的位置，此时可以用 -t 选项来指定位置
+      6. pip install --proxy http://web-proxy.tencent.com:8080 -U numpy==1.16.1 设置代理
 ```
 
    1. Numpy (Numerical python) python 科学计算的基础包
 
    ```python
       1. python -m pip list 查看 
-      2. python -m pip install --upgrade pip 更新 
+      2. python -m pip install --upgrade pip 更新   #pip install -U numpy  (numpy的一些新方法，例如quantile 方法，需要升级numpy版本)
       3. python -m pip install numpy 安装  （使用豆瓣的源）
 ```
 
