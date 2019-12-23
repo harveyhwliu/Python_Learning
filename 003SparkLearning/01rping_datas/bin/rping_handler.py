@@ -97,7 +97,7 @@ def usr_define_func(rdd,isp_info,prov_info,idc_info):
                     s_idc_isp_id = idc_info[links_d["oc_name"]]["oc_isp_id"]
                     s_idc_prov_id = idc_info[links_d["oc_name"]]["oc_prov_id"]
                     user_prov,user_isp = [str(x) for x in links_d["target_area"].split(links_d["oc_isp"])]
-                    c_idc_isp_id = isp_info[user_isp] if isp_info.has_key(user_isp) else -1
+                    c_idc_isp_id = s_idc_isp_id
                     c_idc_prov_id = prov_info[user_prov] if prov_info.has_key(user_prov) else -1
                     delay = str(values_d["delay"]) if values_d.has_key("delay") else "-1"
                     loss = str(values_d["loss"]) if values_d.has_key("loss") else "-1"
