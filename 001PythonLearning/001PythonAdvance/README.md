@@ -23,7 +23,8 @@
       
    3. Matplotlib 最流行的绘图数据图表的python库
    4. Scipy  包括统计,优化,整合,线性代数模块,傅里叶变换,信号和图像处理,常微分方程求解器等等
-
+   5. python 学习的工具： http://www.pythontutor.com/
+   
 ## 1、 python 2 和 python 3 的区别
    1. https://wiki.python.org/moin/Python2orPython3
    2. https://www.cnblogs.com/weikunzz/p/6857971.html
